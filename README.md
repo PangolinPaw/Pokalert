@@ -19,7 +19,8 @@ Note: This stuff is unfinished and untested.
 If an interesting pokemon (listed in **alertList.txt**) appears, details are sent to the recipient, along with a heatmap of all previous encounters and a marker indicating the general area of this latest occurrence.
 
 ####Example Heatmap:
+Below is a heatmap of all Pidgey appearances in a single day. The latest occurrence is marked by the small blue dot in the centre (the actual output is a zoom-able HTML file, not a PNG like below). This will hopefully let you get to the current Pidgey, but also give you an idea of where to look for others if you don't get there in time.
 ![heatmap_any](https://cloud.githubusercontent.com/assets/9369383/17296837/06103736-57fb-11e6-8e73-06523d39f598.png)
 
 ### Thanks:
-Based on [leegao](https://github.com/leegao/pokemongo-api-demo/tree/master)'s work
+Based on [leegao](https://github.com/leegao/pokemongo-api-demo/tree/master)'s work.
