@@ -18,5 +18,8 @@ Note: This stuff is unfinished and untested.
 
 If an interesting pokemon (listed in **alertList.txt**) appears, details are sent to the recipient, along with a heatmap of all previous encounters and a marker indicating the general area of this latest occurrence.
 
+####Example Heatmap:
+![heatmap_any](https://cloud.githubusercontent.com/assets/9369383/17296837/06103736-57fb-11e6-8e73-06523d39f598.png)
+
 ### Thanks:
 Based on [leegao](https://github.com/leegao/pokemongo-api-demo/tree/master)'s work
