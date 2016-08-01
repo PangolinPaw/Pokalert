@@ -80,5 +80,3 @@ if __name__ == "__main__":
 	startLat = 51.5957719419205
 	startLng = -2.10426268353617
 	makeMap("Weedle", startLat, startLng)
-# "TETBURY HILL, MALMESBURY, WILTSHIRE"
-# "MASSEY CLOSE, CHIPPENHAM, WILTSHIRE"
