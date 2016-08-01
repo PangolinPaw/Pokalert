@@ -1,5 +1,6 @@
 ## Pokalert
 Email alerts when 'interesting' pokemon are encountered.
+(At present emails are sent via Outlook, GMail version pending...)
 
 ### Install:
 pip install -r requirements.txt
