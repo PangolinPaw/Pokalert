@@ -22,6 +22,6 @@ A wild {0} appeared!
 Location: \t https://www.google.com/maps/preview/@{1},{2},16z 
 Expires at:\t{3}""".format(name, lat, lon, expiresAt)
 		print "Sending {0}".format(mapfile)
-		outlook.sendMessage("Gareth.Murden@Dyson.com", "PKMN", message, mapfile)
+		outlook.sendMessage("RECIPIENT_ADDRESS", "PKMN", message, mapfile)
 
 
