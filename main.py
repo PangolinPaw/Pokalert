@@ -5,7 +5,6 @@ import json         # To load pokemon data
 import argparse     # To interface with the servers
 import pokemon_pb2  # Unofficial Pokemon Go API
 import time         # Time delays to throttle server queries
-import os           # To refresh the screen between displaying nearby pokemon
 
 from google.protobuf.internal import encoder # Location handling
 
@@ -16,8 +15,6 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 from s2sphere import *
 
-import pokedex # Home-made pokemon storage database
-import alert # Home-made notification sender for interesting pokemon
 
 def encode(cellid):
     output = []
@@ -249,13 +246,7 @@ def loadSettings():
         elif item[0] == "password":
             password = item[1].strip()
         elif item[0] == "location":
-            location = item[1]
-        elif item[0] == "email":
-            emailAlerts = item[1]
-        elif item[0] == "gmail":
-            gmailAcc = item[1]
-        elif item[0] == "gmailPassword":
-            gmailPass = item[1]
+            location= item[1].strip()
         else:
             print " [!] Error: Unrecognised setting '{0}' in settings.txt.".format(item[0])
 
@@ -342,27 +333,8 @@ def main():
                         visible.append(wild)
                         seen.add(hash)
 
-        print('')
-        for cell in h.cells:
-            if cell.NearbyPokemon:
-                other = LatLng.from_point(Cell(CellId(cell.S2CellId)).get_center())
-                diff = other - origin
-                # print(diff)
-                difflat = diff.lat().degrees
-                difflng = diff.lng().degrees
-                direction = (('N' if difflat >= 0 else 'S') if abs(difflat) > 1e-4 else '')  + (('E' if difflng >= 0 else 'W') if abs(difflng) > 1e-4 else '')
-
-                # THIS ORIGINALLY PRINTED A SUMMARY OF THE CLOSEST POKEMON
-                #print("Within one step of %s (%sm %s from you):" % (other, int(origin.get_distance(other).radians * 6366468.241830914), direction))
-                #for poke in cell.NearbyPokemon:
-                    #print('    (%s) %s' % (poke.PokedexNumber, pokemons[poke.PokedexNumber - 1]['Name']))
-        
-       
-
-        print('')
-        # THIS IS THE BIT THAT LISTS ALL NEARBY POKEMON
-
-        
+        ###  THIS IS THE BIT THAT LISTS ALL NEARBY POKEMON
+        print "\nDETECTED POKEMON (near {lat}, {lon} at {currentTime}):".format(lat=original_lat, lon=original_long, currentTime=datetime.now().strftime("%y-%m-%d %H:%M:%S"))
         for poke in visible:
             other = LatLng.from_degrees(poke.Latitude, poke.Longitude)
             diff = other - origin
@@ -379,76 +351,14 @@ def main():
             lat = poke.Latitude # Current pokemon location
             lon = poke.Longitude # Current pokemon location
 
-            #################
-            # MY STUFF
+            ### DISPLAY THE RELEVANT DETAILS OF EACH NEARBY POKEMON
             if timeToExp > 0: # Only display pokemon that haven't expired since they were found
-                
-                pokedex.updateLocal(num, name, lat, lon, expiresAt)
-                pokedex.saveHistory(num, name, lat, lon, args.location)
-                alert.alert(num, name, lat, lon, expiresAt) # Send alert of interesting pokemon appearance
-
-        displayPokemon()
-
-        print('')
+                print "{pokedexNum} {pokemon} (expires at {expiry})\n\t{lat}, {lon} ({dist}m {direction})".format(pokedexNum=num, pokemon=name, expiry=expiresAt, lat=lat, lon=lon, dist=distance, direction=direction)
+        
         walk = getNeighbors()
         next = LatLng.from_point(Cell(CellId(walk[2])).get_center())
         set_location_coords(next.lat().degrees, next.lng().degrees, 0)
 
-def displayPokemon():
-    "Using the data stored in pokedex.db in the main() loop above, display nearby pokemon"
-    
-    # Clear screen between refreshes of the nearby pokemon list
-    try:            
-        os.system("cls") # Windows
-    except:
-        os.system("clear") # Linux
-
-    # I've se the program to display a table of pokemon on screen
-    print "\nPokedex\tName\t\tDist\tDir\tExpires"
-    print "-------\t----\t\t----\t---\t-------"
-
-    # This bit is just to make sure the long names fit nicely in the displayed output
-
-    nearby = [] # This list will hold formatted data for all nearby pokemon
-    localList = pokedex.getLocal()
-    # localList format:
-    #[ (NUM, NAME, LAT, LNG, EXPIRY), (NUM, NAME, LAT, LNG, EXPIRY), etc. ]
-    for pokemon in localList:
-        # Get basic info from database:
-        num = int(pokemon[0])
-        name = pokemon[1]
-        latitude = float(pokemon[2])
-        longitude = float(pokemon[3])
-        expiry = pokemon[4]
-
-        # Calculate distance & direction from coordinates:
-        other = LatLng.from_degrees(latitude, longitude)
-        diff = other - origin
-        difflat = diff.lat().degrees
-        difflng = diff.lng().degrees
-        
-        direction = (('N' if difflat >= 0 else 'S') if abs(difflat) > 1e-4 else '')  + (('E' if difflng >= 0 else 'W') if abs(difflng) > 1e-4 else '')
-        distance = int(origin.get_distance(other).radians * 6366468.241830914) # Distance from start lat/lon in meters
-
-        nearby.append([num, name, latitude, longitude, distance, direction, expiry])
-
-    # Sort the nearby list by distance
-    nearby.sort(key=lambda x: x[4])
-    for pokemon in nearby:
-        num = pokemon[0]
-        name = pokemon[1]
-        lat = pokemon[2]
-        lng = pokemon[3]
-        distance = pokemon[4]
-        direction = pokemon[5]
-        expiry = pokemon[6]
-
-        if len(name)<8:
-            extraTab = "\t"
-        else:
-            extraTab = ""
-
-        print "{num}\t{name}\t{extraTab}{distance}m\t{direction}\t{expiry}".format(num=num, name=name, extraTab=extraTab, distance=distance, direction=direction, expiry=expiry)
 
 if __name__ == '__main__':
     main()
