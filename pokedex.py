@@ -59,7 +59,9 @@ def saveHistory(pokeNum, pokeName, lat, lng, location):
 	db.commit
 
 	# Store new pokemon appearance in the pokedex
-	add(pokeNum, pokeName, lat, lng, location)
+	result = add(pokeNum, pokeName, lat, lng, location)
+	if result == True:
+		print "New pokemon added to pokedex:\n  {0}".format(name)
 
 def add(pokeNum, pokeName, lat, lng, location):
 	"Add newly discovered pokemon to Pokedex. Returns true if this is the first encounter"
