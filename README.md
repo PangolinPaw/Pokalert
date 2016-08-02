@@ -5,7 +5,29 @@ Email alerts when 'interesting' pokemon are encountered.
 (At present emails are sent via Outlook, GMail version pending...)
 
 ### Installation:
-pip install -r requirements.txt
+The folowing commands assume you're working on a Raspberry pi running Raspbian.
+
+Download the zip from here:
+
+`wget https://github.com/PangolinPaw/Pokalert/archive/master.zip`
+
+Unzip it & move into the directory:
+
+`unzip master.zip`
+
+`cd Pokalert-master`
+
+Install the requirements using pip:
+
+`sudo pip install -r requirements.txt`
+
+Open settings.txt with your favourite editor and enter your details:
+
+`nano settings.txt`
+
+Finally, run the script:
+
+`python main.py`
 
 ### Usage:
 Note: This stuff is unfinished and untested.
