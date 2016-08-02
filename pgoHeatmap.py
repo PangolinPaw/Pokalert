@@ -57,7 +57,7 @@ def addPoints(startLat, startLng, latList, lngList, pkmn):
 	gmap.draw(mapname)
 	return mapname
 
-def makeMap(pkmn, startLat, startLng):
+def makeMap(startLat, startLng, pkmn="ANY"):
 	"Produce heatmap of specified pokemon."
 	appearances = readPoints("history", "")
 	filtAppearances = filterPoke(appearances, pokemon=pkmn)
@@ -75,8 +75,4 @@ def main():
 
 if __name__ == "__main__":
 	#main()
-	latList = [51.5927253232909, 51.5951882786809, 51.5941185409947]
-	lngList = [-2.09981378520729, -2.10469812300322, -2.10471326294716]
-	startLat = 51.5957719419205
-	startLng = -2.10426268353617
-	makeMap("Weedle", startLat, startLng)
+	makeMap(51.4605794091584, -2.11795363157768)
